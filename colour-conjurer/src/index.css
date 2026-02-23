@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-slackey: "Slackey", sans-serif;
+
+  --text-shadow-amber-h1:
+    0 0 20px oklch(100% 0 0),
+    0 0 40px oklch(82.8% 0.189 84.429),
+    0 0 60px oklch(76.9% 0.188 70.08),
+    0 0 100px oklch(66.6% 0.179 58.318)
+  ;
+}
+
+* {
+  @apply box-border;
+}
+
+.responsive-width {
+  @apply w-full max-w-7xl m-auto
+}
