@@ -7,6 +7,68 @@ interface FileWithPreview extends File {
   preview: string;
 }
 
+function InteractiveCanvas({ file }: { file: FileWithPreview }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [selectedColours, setSelectedColours] = useState<string[]>([]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const img = new Image();
+    img.src = file.preview;
+
+    img.onload = () => {
+      // Scale canvas internal resolution to match actual image aspect ratio
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // Draw the uploaded image onto the canvas viewport
+      ctx.drawImage(img, 0, 0);
+    };
+  }, [file.preview]);
+
+  useEffect(() => {
+    console.log(selectedColours);
+  }, [selectedColours]);
+
+  const handleMouseClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const bounding = canvas.getBoundingClientRect();
+    const x = e.clientX - bounding.left;
+    const y = e.clientY - bounding.top;
+
+    const pixel = ctx.getImageData(x, y, 1, 1);
+    const data = pixel.data;
+
+    const red = data[0].toString(16).padStart(2, "0");
+    const green = data[1].toString(16).padStart(2, "0");
+    const blue = data[2].toString(16).padStart(2, "0");
+
+    const hexColor = `#${red}${green}${blue}`;
+
+    setSelectedColours((prevColours) => {
+      return [...prevColours, hexColor];
+    });
+  }
+
+  return (
+    <canvas
+      ref={canvasRef}
+      onMouseDown={handleMouseClick}
+      className="block w-auto max-h-150 border border-gray-300 cursor-crosshair rounded-lg"
+    />
+  );
+}
+
 function ImageDropzone() {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
 
@@ -40,14 +102,7 @@ function ImageDropzone() {
 
   const thumbs = files.map((file) => (
     <div key={file.name}>
-      <img
-        src={file.preview}
-        className="block w-auto max-h-150"
-        // Revoke data uri after image is loaded
-        onLoad={() => {
-          URL.revokeObjectURL(file.preview);
-        }}
-      />
+      <InteractiveCanvas file={file} />
     </div>
   ));
 
@@ -88,7 +143,7 @@ function ImageDropzone() {
         <p className="text-sm">or click to browser files</p>
       </div>
       <div
-        className={`${files.length == 0 ? "hidden" : "block"} border-2 border-gray-300 rounded-2xl relative w-fit`}
+        className={`${files.length == 0 ? "hidden" : "block"} relative w-fit`}
       >
         <button
           onClick={removeImage}
