@@ -23,7 +23,11 @@ function ImageDropzone() {
     fileRejections,
   } = useDropzone({
     accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
+      "image/bmp": [".bmp"],
+      "image/gif": [".gif"],
+      "image/jpeg": [".jpeg", ".jpg"],
+      "image/png": [".png"],
+      "image/webp": [".webp"]
     },
     onDrop: (acceptedFiles) => {
       setFiles(
@@ -59,12 +63,11 @@ function ImageDropzone() {
         {...getRootProps()}
         className={`
           ${files.length == 0 ? "flex" : "hidden"}
-          flex-col items-center justify-center p-5 border-2 border-dashed
-          rounded-2xl bg-gray-50 text-gray-400 transition-colors duration-200
-          text-center m-5 w-full min-h-100
-          ${isFocused ? "border-blue-500" : "border-gray-300"}
-          ${isDragAccept ? "border-green-400" : ""}
-          ${isDragReject ? "border-red-500 bg-red-500/10" : ""}
+          flex-col items-center justify-center p-5 m-5 w-100 h-100
+          border-6 rounded-2xl text-center
+          ${isDragAccept ? "text-teal-100 border-teal-500 bg-teal-100/10" :
+            "text-indigo-300 border-indigo-600 bg-indigo-600/10" }
+          ${isDragReject ? "text-red-400 border-red-500 bg-red-500/10" : ""}
         `}
       >
         {/* The dropzone input */}
@@ -73,7 +76,8 @@ function ImageDropzone() {
         {/* Error message for rejected files */}
         {(fileRejections.length > 0 || isDragReject) && (
           <em className="text-xl font-semibold">
-            Only *.png, *.jpg, *.jpeg, *.gif, and *.webp files are accepted.
+            Only the following image formats are accepted:
+            *.bmp, *.gif, *.jpeg, *.jpg, *.png, *.webp
           </em>
         )}
 
