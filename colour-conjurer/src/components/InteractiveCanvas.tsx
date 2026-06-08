@@ -48,9 +48,24 @@ function InteractiveCanvas({ file }: { file: FileWithPreview }) {
 
     // Get the x,y coordinated of the mouse click and convert them to
     // coordinates on the canvas element
+
+    // Get the canvas bounding box
     const bounding = canvas.getBoundingClientRect();
-    const x = e.clientX - bounding.left;
-    const y = e.clientY - bounding.top;
+
+    // We need to consider the thickness of the border in our calculations
+    const borderThickness = 10;
+
+    // Subtract the border from the container's outer measurements
+    const contentWidth = bounding.width - (borderThickness * 2);
+    const contentHeight = bounding.height - (borderThickness * 2);
+
+    // Get the x,y coordinates of the mouse click relative to the canvas element
+    const cssX = e.clientX - bounding.left - borderThickness;
+    const cssY = e.clientY - bounding.top - borderThickness;
+
+    // Scale coordinates to match the internal resolution of the canvas
+    const x = cssX * (canvas.width / contentWidth);
+    const y = cssY * (canvas.height / contentHeight);
 
     // Get info about the pixel that was clicked on
     const pixel = ctx.getImageData(x, y, 1, 1);
@@ -70,7 +85,7 @@ function InteractiveCanvas({ file }: { file: FileWithPreview }) {
     <canvas
       ref={canvasRef}
       onMouseDown={handleMouseClick}
-      className="block w-auto max-h-150 border border-gray-300 cursor-crosshair rounded-lg"
+      className="mx-5 w-auto max-w-[calc(100%-40px)] h-auto max-h-100 border-10 border-neutral-50 cursor-crosshair rounded-lg"
     />
   );
 }

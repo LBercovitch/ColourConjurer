@@ -63,9 +63,9 @@ function ImageDropzone() {
         {...getRootProps()}
         className={`
           ${files.length == 0 ? "flex" : "hidden"}
-          flex-col items-center justify-center p-5 m-5 w-100 h-100
-          border-6 rounded-2xl text-center
-          ${isDragAccept ? "text-teal-100 border-teal-500 bg-teal-100/10" :
+          flex-col items-center justify-center p-5 mx-5 w-100 h-100
+          border-10 rounded-2xl text-center
+          ${isDragAccept ? "text-amber-100 border-amber-600 bg-amber-100/10" :
             "text-indigo-300 border-indigo-600 bg-indigo-600/10" }
           ${isDragReject ? "text-red-400 border-red-500 bg-red-500/10" : ""}
         `}
@@ -89,11 +89,13 @@ function ImageDropzone() {
         <p className="text-sm">or click to browser files</p>
       </div>
       <div
-        className={`${files.length == 0 ? "hidden" : "block"} relative w-fit`}
+        className={`${files.length == 0 ? "hidden" : "block"} relative w-auto max-w-[calc(100%)] md:max-w-[calc(50%)]`}
       >
         <button
           onClick={removeImage}
-          className="absolute z-10 right-2 top-2 cursor-pointer border-2 rounded-full text-4xl/4 pb-2 w-10 h-10 bg-neutral-50"
+          className="cursor-pointer absolute z-10 right-10 top-5 pb-2 w-10 h-10
+            border-3 rounded-full text-4xl/4 text-neutral-700 bg-neutral-50
+            hover:text-neutral-800 hover:bg-neutral-200"
         >
           &times;
         </button>
