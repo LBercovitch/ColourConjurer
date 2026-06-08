@@ -17,7 +17,6 @@ function ImageDropzone() {
   const {
     getRootProps,
     getInputProps,
-    isFocused,
     isDragAccept,
     isDragReject,
     fileRejections,
@@ -58,7 +57,7 @@ function ImageDropzone() {
   }, [files]);
 
   return (
-    <section className="flex justify-center">
+    <section className="col-span-2 justify-self-end align-self-start">
       <div
         {...getRootProps()}
         className={`
@@ -89,7 +88,7 @@ function ImageDropzone() {
         <p className="text-sm">or click to browser files</p>
       </div>
       <div
-        className={`${files.length == 0 ? "hidden" : "block"} relative w-auto max-w-[calc(100%)] md:max-w-[calc(50%)]`}
+        className={`${files.length == 0 ? "hidden" : "block"} relative w-auto max-w-[calc(100%)]`}
       >
         <button
           onClick={removeImage}
